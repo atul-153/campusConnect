@@ -56,7 +56,7 @@ Protected requests use `Authorization: Bearer <token>`. Successful responses are
 
 | Method | Path | Access | Purpose |
 | --- | --- | --- | --- |
-| POST | `/api/auth/register` | Public | Create a Student account |
+| POST | `/api/auth/register` | Public | Create a Student account using `firstname.lastname_branch_year@tsdcem.ac.in` |
 | POST | `/api/auth/login` | Public | Sign in and receive a JWT |
 | GET | `/api/dashboard` | Student/Admin | Role-aware dashboard statistics |
 | GET | `/api/elections` | Student/Admin | Elections and eligible results |

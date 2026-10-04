@@ -31,6 +31,8 @@ const navigation = [
   { id: "events", label: "Campus events", icon: CalendarDays },
   { id: "complaints", label: "Private complaints", icon: ShieldCheck },
 ];
+const STUDENT_EMAIL_PATTERN =
+  "[A-Za-z]+\\.[A-Za-z]+_[A-Za-z]+_[0-9]{2,4}@tsdcem\\.ac\\.in";
 
 function dateLabel(value) {
   if (!value) return "";
@@ -434,9 +436,21 @@ function AuthScreen({ mode, setMode, onSubmit, busy, notice }) {
               <input
                 name="email"
                 type="email"
-                placeholder="you@northfield.edu"
+                placeholder={
+                  mode === "register"
+                    ? "firstname.lastname_branch_year@tsdcem.ac.in"
+                    : "College email"
+                }
                 autoComplete="email"
                 required
+                pattern={
+                  mode === "register" ? STUDENT_EMAIL_PATTERN : undefined
+                }
+                title={
+                  mode === "register"
+                    ? "Use firstname.lastname_branch_year@tsdcem.ac.in"
+                    : undefined
+                }
               />
             </label>
             <label>

@@ -6,7 +6,7 @@ import java.util.List;
 
 public final class Dtos {
     private Dtos() {}
-    public record RegisterRequest(@NotBlank @Size(min=2,max=120) String name, @NotBlank @Email @Size(max=190) String email, @NotBlank @Size(min=8,max=72) String password) {}
+    public record RegisterRequest(@NotBlank @Size(min=2,max=120) String name, @NotBlank @Email @Pattern(regexp="(?i)^[a-z]+\\.[a-z]+_[a-z]+_[0-9]{2,4}@tsdcem\\.ac\\.in$", message="Email must look like firstname.lastname_branch_year@tsdcem.ac.in") @Size(max=190) String email, @NotBlank @Size(min=8,max=72) String password) {}
     public record LoginRequest(@NotBlank @Email String email, @NotBlank String password) {}
     public record AuthResponse(String token, String name, String email, String role) {}
     public record ElectionRequest(@NotBlank @Size(max=180) String title, @NotBlank @Size(max=1200) String description, @NotNull ElectionCategory category) {}
