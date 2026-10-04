@@ -25,9 +25,9 @@ services:
       DB_USERNAME: campusconnect
       DB_PASSWORD: ${DB_PASSWORD:-campusconnect}
       JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-this-to-a-long-random-value-32chars}
-      ADMIN_EMAIL: ${ADMIN_EMAIL:-teacher@northfield.edu}
-      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-ChangeMe123!}
-      ADMIN_NAME: ${ADMIN_NAME:-CampusConnect Admin}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-sumeet.rathod_it_2026@tsdcem.ac.in}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-iamadmin}
+      ADMIN_NAME: ${ADMIN_NAME:-Sumeet Rathod}
       SEED_STUDENT_PASSWORD: ${SEED_STUDENT_PASSWORD:-}
       CORS_ALLOWED_ORIGIN: http://localhost:3000
     depends_on:

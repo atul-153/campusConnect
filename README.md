@@ -10,7 +10,7 @@ Prerequisites: Docker Desktop with Docker Compose.
 2. From this folder, run `docker compose up --build`.
 3. Open `http://localhost:3000`.
 
-Compose starts MySQL, the Spring Boot API, and the React UI. The first Admin account is created from `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in `.env`; student registration never accepts a role, so a user cannot make themselves an Admin. The default values in the example are for local development only.
+Compose starts MySQL, the Spring Boot API, and the React UI. The Admin account uses `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` from `.env`; the local example is Sumeet Rathod at `sumeet.rathod_it_2026@tsdcem.ac.in` with password `iamadmin`. On startup, the configured password is refreshed only if that email already belongs to an Admin; a Student account is never promoted. Student registration never accepts a role. These credentials are for local development only; replace them before any deployment.
 
 To seed the three requested student accounts, set `SEED_STUDENT_PASSWORD` in `.env` to their shared password before starting the API. Student seed accounts are inserted only when missing, and their passwords are stored as BCrypt hashes. The requested Admin account uses the `ADMIN_EMAIL` and `ADMIN_NAME` values above; set its `ADMIN_PASSWORD` locally. Existing accounts are not overwritten.
 
@@ -26,7 +26,7 @@ $env:DB_USERNAME = 'campusconnect'
 $env:DB_PASSWORD = 'your-local-db-password'
 $env:JWT_SECRET = 'use-a-long-random-secret-of-at-least-32-characters'
 $env:ADMIN_EMAIL = 'sumeet.rathod_it_2026@tsdcem.ac.in'
-$env:ADMIN_PASSWORD = 'your-admin-password'
+$env:ADMIN_PASSWORD = 'iamadmin'
 $env:ADMIN_NAME = 'Sumeet Rathod'
 $env:SEED_STUDENT_PASSWORD = 'set-the-requested-student-password-locally'
 Set-Location backend

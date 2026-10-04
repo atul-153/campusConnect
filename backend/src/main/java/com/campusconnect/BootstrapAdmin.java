@@ -17,8 +17,14 @@ class BootstrapAdmin {
         return args -> {
             if (!email.isBlank() && !password.isBlank()) {
                 String normalizedEmail = email.trim().toLowerCase();
-                if (users.findByEmail(normalizedEmail).isEmpty()) {
+                var existing = users.findByEmail(normalizedEmail);
+                if (existing.isEmpty()) {
                     users.save(new UserEntity(name, normalizedEmail, passwords.encode(password), Role.ADMIN));
+                } else if (existing.get().role == Role.ADMIN) {
+                    UserEntity admin = existing.get();
+                    admin.name = name;
+                    admin.passwordHash = passwords.encode(password);
+                    users.save(admin);
                 }
             }
         };
