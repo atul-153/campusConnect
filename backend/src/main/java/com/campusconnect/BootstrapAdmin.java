@@ -5,6 +5,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.List;
 
 @Configuration
 class BootstrapAdmin {
@@ -22,4 +23,24 @@ class BootstrapAdmin {
             }
         };
     }
+
+    @Bean
+    ApplicationRunner createRequestedStudents(UserRepository users, PasswordEncoder passwords,
+        @Value("${SEED_STUDENT_PASSWORD:}") String password) {
+        return args -> {
+            if (password.isBlank()) return;
+            List<SeedStudent> students = List.of(
+                new SeedStudent("Atul Tiwari", "atul.tiwari_it_2025@tsdcem.ac.in"),
+                new SeedStudent("Anurag Yadav", "anurag.yadav_it_2025@tsdcem.ac.in"),
+                new SeedStudent("Hrishabh Soni", "hrishabh.soni_it_2025@tsdcem.ac.in")
+            );
+            for (SeedStudent student : students) {
+                if (users.findByEmail(student.email()).isEmpty()) {
+                    users.save(new UserEntity(student.name(), student.email(), passwords.encode(password), Role.STUDENT));
+                }
+            }
+        };
+    }
+
+    private record SeedStudent(String name, String email) {}
 }

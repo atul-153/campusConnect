@@ -12,6 +12,8 @@ Prerequisites: Docker Desktop with Docker Compose.
 
 Compose starts MySQL, the Spring Boot API, and the React UI. The first Admin account is created from `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in `.env`; student registration never accepts a role, so a user cannot make themselves an Admin. The default values in the example are for local development only.
 
+To seed the three requested student accounts, set `SEED_STUDENT_PASSWORD` in `.env` to their shared password before starting the API. Student seed accounts are inserted only when missing, and their passwords are stored as BCrypt hashes. The requested Admin account uses the `ADMIN_EMAIL` and `ADMIN_NAME` values above; set its `ADMIN_PASSWORD` locally. Existing accounts are not overwritten.
+
 Stop the app with `Ctrl+C`; run `docker compose down` to stop and remove containers. Database files remain in the `campusconnect_data` volume. `docker compose down -v` also deletes that database volume.
 
 ## Run Services Separately
@@ -23,8 +25,10 @@ $env:DB_URL = 'jdbc:mysql://localhost:3306/campusconnect?useSSL=false&allowPubli
 $env:DB_USERNAME = 'campusconnect'
 $env:DB_PASSWORD = 'your-local-db-password'
 $env:JWT_SECRET = 'use-a-long-random-secret-of-at-least-32-characters'
-$env:ADMIN_EMAIL = 'teacher@northfield.edu'
+$env:ADMIN_EMAIL = 'sumeet.rathod_it_2026@tsdcem.ac.in'
 $env:ADMIN_PASSWORD = 'your-admin-password'
+$env:ADMIN_NAME = 'Sumeet Rathod'
+$env:SEED_STUDENT_PASSWORD = 'set-the-requested-student-password-locally'
 Set-Location backend
 mvn spring-boot:run
 ```

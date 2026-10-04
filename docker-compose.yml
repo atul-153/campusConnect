@@ -28,6 +28,7 @@ services:
       ADMIN_EMAIL: ${ADMIN_EMAIL:-teacher@northfield.edu}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-ChangeMe123!}
       ADMIN_NAME: ${ADMIN_NAME:-CampusConnect Admin}
+      SEED_STUDENT_PASSWORD: ${SEED_STUDENT_PASSWORD:-}
       CORS_ALLOWED_ORIGIN: http://localhost:3000
     depends_on:
       db:
