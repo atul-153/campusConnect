@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: campusconnect
+      MYSQL_USER: campusconnect
+      MYSQL_PASSWORD: ${DB_PASSWORD:-campusconnect}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-local-root-password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - campusconnect_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DB_URL: jdbc:mysql://db:3306/campusconnect?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: campusconnect
+      DB_PASSWORD: ${DB_PASSWORD:-campusconnect}
+      JWT_SECRET: ${JWT_SECRET:-local-development-secret-change-this-to-a-long-random-value-32chars}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-teacher@northfield.edu}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-ChangeMe123!}
+      ADMIN_NAME: ${ADMIN_NAME:-CampusConnect Admin}
+      CORS_ALLOWED_ORIGIN: http://localhost:3000
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+volumes:
+  campusconnect_data:
