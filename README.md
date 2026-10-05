@@ -1,6 +1,6 @@
 # CampusConnect
 
-CampusConnect is a full-stack college community portal built with React, Spring Boot, Spring Data JPA, and MySQL. It includes student registration/login, two-category elections, a ranked suggestion board, private complaints, campus events, and a faculty dashboard.
+CampusConnect is a full-stack college community portal built with React, Spring Boot, and Spring Data JPA. It uses MySQL for Docker deployments and includes an H2 profile for local development. It includes student registration/login, two-category elections, a ranked suggestion board, private complaints, campus events, and a faculty dashboard.
 
 ## Run Everything With Docker
 
@@ -17,6 +17,26 @@ To seed the three requested student accounts, set `SEED_STUDENT_PASSWORD` in `.e
 Stop the app with `Ctrl+C`; run `docker compose down` to stop and remove containers. Database files remain in the `campusconnect_data` volume. `docker compose down -v` also deletes that database volume.
 
 ## Run Services Separately
+
+### Local development without MySQL or Docker
+
+The `local` Spring profile uses an H2 database stored in `backend/data/`, so you can run the complete app without installing or configuring MySQL. From the repository root, start the API:
+
+```powershell
+Set-Location backend
+mvn spring-boot:run "-Dspring-boot.run.profiles=local"
+```
+
+In a second terminal, from the repository root, start the frontend:
+
+```powershell
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. Vite forwards `/api` requests to the API at `http://localhost:8080`. Student registration and login use the local database, which persists across API restarts. The local database is separate from the MySQL database used by Docker Compose. The local profile also creates the development Admin account `sumeet.rathod_it_2026@tsdcem.ac.in` with password `iamadmin`; override `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` before starting the API to change it. Do not use these development credentials in a deployment.
+
+### MySQL development
 
 Prerequisites: Java 17+, Maven 3.9+, Node.js 20+, npm, and MySQL 8. Create a MySQL database/user (or load `database/schema.sql` in MySQL Workbench), then set the backend environment variables shown below. The application uses `spring.jpa.hibernate.ddl-auto=update` for local development and can create/update tables on startup.
 
