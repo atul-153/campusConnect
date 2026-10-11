@@ -40,6 +40,18 @@ Open `http://localhost:5173`. Vite forwards `/api` requests to the API at `http:
 
 Prerequisites: Java 17+, Maven 3.9+, Node.js 20+, npm, and MySQL 8. Create a MySQL database/user (or load `database/schema.sql` in MySQL Workbench), then set the backend environment variables shown below. The application uses `spring.jpa.hibernate.ddl-auto=update` for local development and can create/update tables on startup.
 
+If MySQL is not configured locally, the API can use an isolated, persistent H2 database instead. From the repository root, run the backend in one PowerShell terminal:
+
+```powershell
+Set-Location backend
+New-Item -ItemType Directory -Force data
+$env:SPRING_PROFILES_ACTIVE = 'local-h2'
+$env:PORT = '8080'
+mvn spring-boot:run
+```
+
+In a second terminal, run the frontend with `npm run dev` from the repository root. H2 data is stored under `backend/data/` and is ignored by Git. This database is separate from MySQL; accounts from another database must register again.
+
 ```powershell
 $env:DB_URL = 'jdbc:mysql://localhost:3306/campusconnect?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC'
 $env:DB_USERNAME = 'campusconnect'
@@ -60,7 +72,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. Vite proxies `/api` requests to `http://localhost:8080`. For a separately hosted frontend, set `VITE_API_URL` to the API origin and set backend `CORS_ALLOWED_ORIGIN` to the frontend origin.
+Open `http://localhost:5173`. Vite proxies `/api` requests to `http://localhost:8080` by default. If another service is already using that port, set `PORT=8081` for the backend and `VITE_API_PROXY_TARGET=http://localhost:8081` for Vite. For a separately hosted frontend, set `VITE_API_URL` to the API origin and set backend `CORS_ALLOWED_ORIGIN` to the frontend origin.
 
 ## Database Schema
 

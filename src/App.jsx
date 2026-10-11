@@ -42,6 +42,30 @@ function dateLabel(value) {
   }).format(new Date(value));
 }
 
+function getEventDate(event) {
+  if (event.startsAt) {
+    const date = new Date(event.startsAt);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  if (!event.date) return null;
+  const date = new Date(`${event.date}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return null;
+  if (!event.time) return date;
+
+  const match = event.time.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+  if (!match) return null;
+  let hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const meridiem = match[3]?.toUpperCase();
+  if (minutes > 59 || (meridiem ? hours < 1 || hours > 12 : hours > 23))
+    return null;
+  if (meridiem) hours = (hours % 12) + (meridiem === "PM" ? 12 : 0);
+
+  date.setHours(hours, minutes, 0, 0);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
 function App() {
   const [session, setSession] = useState(() => {
     try {
@@ -62,6 +86,7 @@ function App() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [modal, setModal] = useState(null);
+  const [ideaDraft, setIdeaDraft] = useState("");
 
   const isAdmin = session?.role === "ADMIN";
 
@@ -104,9 +129,11 @@ function App() {
       setModal(null);
       setNotice(success);
       window.setTimeout(() => setNotice(""), 2800);
+      return true;
     } catch (error) {
       setNotice(error.message);
       window.setTimeout(() => setNotice(""), 4200);
+      return false;
     } finally {
       setBusy(false);
     }
@@ -161,7 +188,9 @@ function App() {
     );
 
   const upcomingEvents = [...data.events].sort(
-    (a, b) => new Date(a.startsAt) - new Date(b.startsAt),
+    (a, b) =>
+      (getEventDate(a)?.getTime() ?? Number.MAX_SAFE_INTEGER) -
+      (getEventDate(b)?.getTime() ?? Number.MAX_SAFE_INTEGER),
   );
   const sections = {
     overview: (
@@ -185,6 +214,9 @@ function App() {
       <Ideas
         items={data.suggestions}
         isAdmin={isAdmin}
+        busy={busy}
+        draft={ideaDraft}
+        setDraft={setIdeaDraft}
         act={act}
         openModal={setModal}
         token={session.token}
@@ -950,9 +982,8 @@ function AdminElectionTools({ election, act, openModal, token }) {
   );
 }
 
-function Ideas({ items, isAdmin, act, openModal, token }) {
+function Ideas({ items, isAdmin, busy, draft, setDraft, act, openModal, token }) {
   const [sort, setSort] = useState("score");
-  const [draft, setDraft] = useState("");
   const sorted = useMemo(
     () =>
       [...items].sort((a, b) =>
@@ -988,21 +1019,22 @@ function Ideas({ items, isAdmin, act, openModal, token }) {
       {!isAdmin && (
         <form
           className="idea-composer"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
-            if (!draft.trim()) return;
-            act(
+            const content = draft.trim();
+            if (!content || busy) return;
+            const saved = await act(
               () =>
                 api("/suggestions", {
                   ...request("POST", {
-                    title: draft.trim(),
-                    content: draft.trim(),
+                    title: content,
+                    content,
                   }),
                   token,
                 }),
               "Your idea has been shared",
             );
-            setDraft("");
+            if (saved) setDraft("");
           }}
         >
           <div className="composer-avatar">✳</div>
@@ -1012,8 +1044,9 @@ function Ideas({ items, isAdmin, act, openModal, token }) {
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
             maxLength="180"
+            disabled={busy}
           />
-          <button className="primary-button" disabled={!draft.trim()}>
+          <button className="primary-button" disabled={!draft.trim() || busy}>
             <Plus size={16} /> Share idea
           </button>
         </form>
@@ -1228,63 +1261,70 @@ function Events({ items, isAdmin, act, openModal, token }) {
       </div>
       {items.length ? (
         <div className="event-grid">
-          {items.map((event) => (
-            <article className="event-card" key={event.id}>
-              <div className="event-date-tile">
-                <strong>{new Date(event.startsAt).getDate()}</strong>
-                <span>
-                  {new Intl.DateTimeFormat("en", { month: "short" })
-                    .format(new Date(event.startsAt))
-                    .toUpperCase()}
-                </span>
-              </div>
-              <div className="event-details">
-                <span className="event-category">
-                  {event.category || "CAMPUS EVENT"}
-                </span>
-                <h4>{event.title}</h4>
-                <p>{event.description}</p>
-                <div className="event-meta">
+          {items.map((event) => {
+            const startsAt = getEventDate(event);
+            return (
+              <article className="event-card" key={event.id}>
+                <div className="event-date-tile">
+                  <strong>{startsAt ? startsAt.getDate() : "—"}</strong>
                   <span>
-                    <CalendarDays size={14} />
-                    {new Intl.DateTimeFormat("en", {
-                      weekday: "short",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    }).format(new Date(event.startsAt))}
+                    {startsAt
+                      ? new Intl.DateTimeFormat("en", { month: "short" })
+                          .format(startsAt)
+                          .toUpperCase()
+                      : "TBD"}
                   </span>
-                  <span>{event.location}</span>
                 </div>
-              </div>
-              {isAdmin && (
-                <div className="event-actions">
-                  <button
-                    className="icon-button"
-                    title="Edit event"
-                    onClick={() => openModal({ type: "event-edit", event })}
-                  >
-                    <ClipboardList size={16} />
-                  </button>
-                  <button
-                    className="icon-button remove-button"
-                    title="Delete event"
-                    onClick={() =>
-                      act(
-                        () =>
-                          api(`/admin/events/${event.id}`, {
-                            method: "DELETE",
-                            token,
-                          }),
-                        "Event deleted",
-                      )
-                    }
-                  >
-                    <X size={16} />
-                  </button>
+                <div className="event-details">
+                  <span className="event-category">
+                    {event.category || "CAMPUS EVENT"}
+                  </span>
+                  <h4>{event.title}</h4>
+                  <p>{event.description}</p>
+                  <div className="event-meta">
+                    <span>
+                      <CalendarDays size={14} />
+                      {startsAt
+                        ? new Intl.DateTimeFormat("en", {
+                            weekday: "short",
+                            hour: "numeric",
+                            minute: "2-digit",
+                          }).format(startsAt)
+                        : "Date and time TBD"}
+                    </span>
+                    <span>{event.location}</span>
+                  </div>
                 </div>
-              )}
-            </article>
-          ))}
+                {isAdmin && (
+                  <div className="event-actions">
+                    <button
+                      className="icon-button"
+                      title="Edit event"
+                      onClick={() => openModal({ type: "event-edit", event })}
+                    >
+                      <ClipboardList size={16} />
+                    </button>
+                    <button
+                      className="icon-button remove-button"
+                      title="Delete event"
+                      onClick={() =>
+                        act(
+                          () =>
+                            api(`/admin/events/${event.id}`, {
+                              method: "DELETE",
+                              token,
+                            }),
+                          "Event deleted",
+                        )
+                      }
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+              </article>
+            );
+          })}
         </div>
       ) : (
         <EmptyState
@@ -1298,24 +1338,29 @@ function Events({ items, isAdmin, act, openModal, token }) {
 }
 
 function EventRow({ event }) {
+  const startsAt = getEventDate(event);
   return (
     <article className="event-row">
       <div className="event-date-tile small">
-        <strong>{new Date(event.startsAt).getDate()}</strong>
+        <strong>{startsAt ? startsAt.getDate() : "—"}</strong>
         <span>
-          {new Intl.DateTimeFormat("en", { month: "short" })
-            .format(new Date(event.startsAt))
-            .toUpperCase()}
+          {startsAt
+            ? new Intl.DateTimeFormat("en", { month: "short" })
+                .format(startsAt)
+                .toUpperCase()
+            : "TBD"}
         </span>
       </div>
       <div>
         <h4>{event.title}</h4>
         <p>
           {event.location} ·{" "}
-          {new Intl.DateTimeFormat("en", {
-            hour: "numeric",
-            minute: "2-digit",
-          }).format(new Date(event.startsAt))}
+          {startsAt
+            ? new Intl.DateTimeFormat("en", {
+                hour: "numeric",
+                minute: "2-digit",
+              }).format(startsAt)
+            : "Date and time TBD"}
         </p>
       </div>
       <ArrowUpRight size={15} />
@@ -1515,7 +1560,13 @@ function Modal({ modal, close, submit, busy }) {
 
 async function submitModal(modal, body, token) {
   if (modal.type === "complaint")
-    return api("/complaints", { ...request("POST", body), token });
+    return api(
+      "/complaints",
+      {
+        ...request("POST", { ...body, title: body.subject }),
+        token,
+      },
+    );
   if (modal.type === "event")
     return api("/admin/events", {
       ...request("POST", {
