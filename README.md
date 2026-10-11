@@ -34,23 +34,11 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173`. Vite forwards `/api` requests to the API at `http://localhost:8080`. Student registration and login use the local database, which persists across API restarts. The local database is separate from the MySQL database used by Docker Compose. The local profile also creates the development Admin account `sumeet.rathod_it_2026@tsdcem.ac.in` with password `iamadmin`; override `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` before starting the API to change it. Do not use these development credentials in a deployment.
+Open `http://localhost:5173`. Vite forwards `/api` requests to the API at `http://localhost:8080`. If that port is in use, set `PORT=8081` for the backend and `VITE_API_PROXY_TARGET=http://localhost:8081` before starting Vite. Student registration and login use the local database, which persists across API restarts. The local database is separate from the MySQL database used by Docker Compose. The local profile also creates the development Admin account `sumeet.rathod_it_2026@tsdcem.ac.in` with password `iamadmin`; override `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` before starting the API to change it. Do not use these development credentials in a deployment.
 
 ### MySQL development
 
 Prerequisites: Java 17+, Maven 3.9+, Node.js 20+, npm, and MySQL 8. Create a MySQL database/user (or load `database/schema.sql` in MySQL Workbench), then set the backend environment variables shown below. The application uses `spring.jpa.hibernate.ddl-auto=update` for local development and can create/update tables on startup.
-
-If MySQL is not configured locally, the API can use an isolated, persistent H2 database instead. From the repository root, run the backend in one PowerShell terminal:
-
-```powershell
-Set-Location backend
-New-Item -ItemType Directory -Force data
-$env:SPRING_PROFILES_ACTIVE = 'local-h2'
-$env:PORT = '8080'
-mvn spring-boot:run
-```
-
-In a second terminal, run the frontend with `npm run dev` from the repository root. H2 data is stored under `backend/data/` and is ignored by Git. This database is separate from MySQL; accounts from another database must register again.
 
 ```powershell
 $env:DB_URL = 'jdbc:mysql://localhost:3306/campusconnect?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC'
