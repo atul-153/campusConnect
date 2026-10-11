@@ -255,14 +255,14 @@ function App() {
             <GraduationCap size={22} />
           </span>
           <span>
-            campus<span className="brand-light">voice</span>
+            campus<span className="brand-light">connect</span>
             <small>YOUR CAMPUS, HEARD</small>
           </span>
         </a>
         <div className="campus-switch">
-          <span className="campus-dot">N</span>
+          <span className="campus-dot">T</span>
           <span>
-            Northfield College<small>Student community</small>
+            TSDCEM<small>Student community</small>
           </span>
           <ChevronDown size={15} />
         </div>
@@ -318,7 +318,7 @@ function App() {
       <main className="main-area">
         <header className="topbar">
           <div className="breadcrumbs">
-            Northfield College <span>/</span> {currentNav?.label}
+            TSDCEM <span>/</span> {currentNav?.label}
           </div>
           <div className="top-actions">
             <span className="term-pill">
@@ -341,7 +341,7 @@ function App() {
             <div>
               <p className="eyebrow">
                 {isAdmin ? "FACULTY PORTAL" : "STUDENT PORTAL"} <span>·</span>{" "}
-                NORTHFIELD COLLEGE
+                TSDCEM
               </p>
               <h1>
                 {active === "overview"
@@ -371,7 +371,7 @@ function App() {
           {sections[active]}
           <footer className="page-footer">
             <span>Made for the voices that shape campus.</span>
-            <span>Northfield College · 2026</span>
+            <span>TSDCEM · 2026</span>
           </footer>
         </div>
       </main>
@@ -401,13 +401,13 @@ function AuthScreen({ mode, setMode, onSubmit, busy, notice }) {
             <GraduationCap size={22} />
           </span>
           <span>
-            campus<span className="brand-light">voice</span>
+            campus<span className="brand-light">connect</span>
             <small>YOUR CAMPUS, HEARD</small>
           </span>
         </a>
         <div className="auth-message">
           <span className="issue-tag">
-            <span /> THE NORTHFIELD EDITION · VOL. 01
+            <span /> THE TSDCEM EDITION · VOL. 01
           </span>
           <h1>
             Campus life
@@ -443,7 +443,7 @@ function AuthScreen({ mode, setMode, onSubmit, busy, notice }) {
           <GraduationCap size={20} /> campusconnect
         </div>
         <div className="auth-form-wrap">
-          <p className="eyebrow">NORTHFIELD COLLEGE</p>
+          <p className="eyebrow">TSDCEM</p>
           <h2>{mode === "login" ? "Welcome back." : "Find your voice."}</h2>
           <p className="auth-intro">
             {mode === "login"
@@ -531,7 +531,7 @@ function AuthScreen({ mode, setMode, onSubmit, busy, notice }) {
           </div>
         </div>
         <div className="auth-panel-footer">
-          <span>© 2026 NORTHFIELD CAMPUSCONNECT</span>
+          <span>© 2026 TSDCEM CAMPUSCONNECT</span>
           <span>PRIVACY · COMMUNITY GUIDELINES</span>
         </div>
       </section>
