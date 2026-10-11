@@ -3,11 +3,9 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpRight,
-  Bell,
   CalendarDays,
   Check,
   ChevronDown,
-  CircleHelp,
   ClipboardList,
   GraduationCap,
   Heart,
@@ -292,10 +290,6 @@ function App() {
           <span className="note-spark">✳</span>
         </div>
         <div className="sidebar-bottom">
-          <button className="nav-link">
-            <CircleHelp size={18} />
-            <span>Help & support</span>
-          </button>
           <div className="profile-row">
             <div className="avatar">
               {session.name?.charAt(0)?.toUpperCase()}
@@ -324,13 +318,6 @@ function App() {
             <span className="term-pill">
               <span /> CAMPUS PORTAL · 2026
             </span>
-            <button
-              className="icon-button notification-button"
-              aria-label="Notifications"
-            >
-              <Bell size={19} />
-              <i />
-            </button>
             <div className="top-avatar">
               {session.name?.charAt(0)?.toUpperCase()}
             </div>

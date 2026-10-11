@@ -1,0 +1,371 @@
+:root {
+  color: #202c3f;
+  background: #f4f7fc;
+  --ink: #202c3f;
+  --muted: #74829a;
+  --green: #2f65a1;
+  --green-dark: #244f80;
+  --line: #e0e7f0;
+  --lime: #dce9f8;
+  --blue: #dce9f8;
+}
+
+body {
+  color: #202c3f;
+  background: #f4f7fc;
+}
+
+.sidebar {
+  background: #eff3f9;
+  border-color: #dfe6f0;
+}
+
+.brand,
+.campus-switch,
+.nav-caption,
+.sidebar-note,
+.sidebar-bottom {
+  flex-shrink: 0;
+}
+
+.main-nav {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.sidebar-note {
+  margin: auto 5px 14px;
+  padding: 10px;
+}
+
+.note-icon {
+  width: 25px;
+  height: 25px;
+}
+
+.sidebar-note p {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
+@media (max-height: 700px) and (min-width: 761px) {
+  .sidebar {
+    padding: 16px 14px 12px;
+  }
+
+  .campus-switch {
+    margin: 20px 1px 18px;
+    padding: 8px;
+  }
+
+  .nav-caption {
+    margin-bottom: 7px;
+  }
+
+  .nav-link {
+    padding: 8px 9px;
+  }
+
+  .sidebar-note {
+    margin-bottom: 12px;
+    padding: 8px 10px;
+  }
+
+  .note-spark {
+    top: 6px;
+    right: 10px;
+    font-size: 22px;
+  }
+
+  .sidebar-bottom {
+    padding-top: 8px;
+  }
+
+  .profile-row {
+    padding-top: 7px;
+  }
+}
+
+.brand-mark {
+  background: #244f80;
+  color: #dce9f8;
+}
+
+.brand-light {
+  color: #6688b4;
+}
+
+.campus-switch {
+  border-color: #dfe6f0;
+}
+
+.campus-dot {
+  background: #dce9f8;
+  color: #365d8c;
+}
+
+.nav-link.selected {
+  background: #dfeafa;
+  color: #244f80;
+}
+
+.sidebar-note {
+  background: #e4edf9;
+}
+
+.note-icon {
+  background: #d3e1f4;
+  color: #365f92;
+}
+
+.sidebar-note p {
+  color: #4c607d;
+}
+
+.sidebar-note strong {
+  color: #244f80;
+}
+
+.note-spark,
+.term-pill > span,
+.issue-tag > span {
+  color: #7292ba;
+}
+
+.term-pill > span,
+.issue-tag > span {
+  background: #7292ba;
+}
+
+.avatar,
+.top-avatar {
+  background: #dce7f5;
+  color: #365a88;
+}
+
+.primary-button {
+  background: #2f65a1;
+}
+
+.primary-button:hover {
+  background: #244f80;
+}
+
+.text-button,
+.subtle-button {
+  color: #315f96;
+}
+
+.text-button:hover,
+.subtle-button:hover {
+  color: #1f456f;
+}
+
+.welcome-band {
+  background: #e7effa;
+}
+
+.welcome-band .eyebrow {
+  color: #7187a5;
+}
+
+.welcome-band h2 {
+  color: #263f60;
+}
+
+.welcome-band p:not(.eyebrow) {
+  color: #687d99;
+}
+
+.art-line {
+  border-color: #a9bfdd;
+}
+
+.line-b {
+  border-color: #bdcde2;
+}
+
+.card-a {
+  color: #315f96;
+}
+
+.card-b {
+  background: #dce9f8;
+  color: #426b9d;
+}
+
+.art-flower {
+  color: #7292ba;
+}
+
+.mint {
+  background: #e3ecf8;
+  color: #5279a8;
+}
+
+.idea-marker {
+  background: #e6eef9;
+  color: #6988b2;
+}
+
+.event-date-tile strong {
+  color: #315f96;
+}
+
+.status-label {
+  background: #e6edf6;
+  color: #647b99;
+}
+
+.status-label.open,
+.status-label.published,
+.status-completed {
+  background: #e1ebf8;
+  color: #315f96;
+}
+
+.candidate-option {
+  border-color: #e4eaf2;
+  background: #fbfcfe;
+}
+
+.candidate-initial {
+  background: #e1ebf7;
+  color: #456e9f;
+}
+
+.vote-stack {
+  background: #f0f4fa;
+  color: #71839d;
+}
+
+.vote-stack button {
+  color: #71839d;
+}
+
+.vote-stack button:hover,
+.vote-stack strong {
+  color: #315f96;
+}
+
+.tiny-avatar {
+  background: #e7eef8;
+  color: #6685ad;
+}
+
+.privacy-banner {
+  background: #edf3fa;
+}
+
+.privacy-banner strong {
+  color: #355a86;
+}
+
+.complaint-icon {
+  background: #f2eee7;
+  color: #997b58;
+}
+
+.empty-state > span {
+  background: #e8eff8;
+}
+
+.toast {
+  border-color: #d8e4f2;
+  background: #f4f8fd;
+  color: #3d6596;
+  box-shadow: 0 8px 24px #263f6013;
+}
+
+.modal-backdrop {
+  background: #1e2c4066;
+}
+
+.modal {
+  box-shadow: 0 18px 60px #172a4030;
+}
+
+.modal-form label,
+.auth-form label {
+  color: #596a83;
+}
+
+.modal-form input,
+.modal-form textarea,
+.modal-form select,
+.auth-form input {
+  border-color: #dce4ef;
+  background: #fbfcfe;
+  color: #29394e;
+}
+
+.modal-form input:focus,
+.modal-form textarea:focus,
+.modal-form select:focus,
+.auth-form input:focus {
+  border-color: #7194bf;
+  box-shadow: 0 0 0 3px #e1ebf8;
+}
+
+.auth-page {
+  background: #f6f8fc;
+}
+
+.auth-visual {
+  background: #e7effa;
+}
+
+.issue-tag,
+.auth-form-wrap > .eyebrow {
+  color: #7588a3;
+}
+
+.auth-message h1,
+.auth-form-wrap h2 {
+  color: #263f60;
+}
+
+.auth-message h1 em {
+  color: #6c8bb4;
+}
+
+.auth-message > p {
+  color: #687d99;
+}
+
+.orbit-center {
+  border-color: #bfd0e5;
+  background: #e0eaf7;
+  color: #456e9f;
+}
+
+.orbit-center::before,
+.orbit-center::after {
+  border-color: #b6c9e1;
+}
+
+.orbit-tag {
+  border-color: #e0e7f0;
+  background: #f5f8fc;
+  color: #667d9b;
+  box-shadow: 0 5px 12px #263f600c;
+}
+
+.auth-switch button,
+.auth-privacy svg,
+.auth-mobile-brand {
+  color: #315f96;
+}
+
+.auth-privacy {
+  border-color: #e0e7f0;
+}
+
+.auth-visual::after {
+  color: #7292ba;
+}
+
+.sidebar {
+  border-top-color: #dfe6f0;
+}
